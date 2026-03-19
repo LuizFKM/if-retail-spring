@@ -1,9 +1,10 @@
 package br.edu.ifpr.bsi.ifretailspring.domain.endereco;
 
 import br.edu.ifpr.bsi.ifretailspring.domain.GenericDomain;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Data;
-
+@Entity
 @Data
 @Table(name = "tb_enderecos")
 public class Endereco extends GenericDomain {
