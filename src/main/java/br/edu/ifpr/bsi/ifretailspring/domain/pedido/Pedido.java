@@ -7,10 +7,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name="tb_pedidos")
 public class Pedido extends GenericDomain {
     private Date dataDoPedido;

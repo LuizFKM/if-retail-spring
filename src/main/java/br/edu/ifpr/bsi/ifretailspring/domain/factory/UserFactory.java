@@ -15,6 +15,8 @@ public class UserFactory {
                 return admin;
             case CLIENTE:
                 Cliente cliente = new Cliente();
+                Carrinho carrinho = new Carrinho();
+                carrinho.setCliente(cliente);
                 cliente.setCarrinho(new Carrinho());
                 return cliente;
             default:

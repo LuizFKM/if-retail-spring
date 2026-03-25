@@ -6,11 +6,14 @@ import br.edu.ifpr.bsi.ifretailspring.domain.pedido.Pedido;
 import br.edu.ifpr.bsi.ifretailspring.domain.produto.Produto;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "tb_clientes")
 @PrimaryKeyJoinColumn(name = "user_id")
 public class Cliente extends User {

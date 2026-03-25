@@ -12,6 +12,7 @@ import java.util.List;
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@Table(name="tb_user")
 public abstract class User extends GenericDomain {
     private String name;
     private String cpf;
