@@ -1,12 +1,12 @@
-package br.edu.ifpr.bsi.ifretailspring.domain.carrinho;
+package br.edu.ifpr.bsi.ifretailspring.domain.pedido;
 
 import br.edu.ifpr.bsi.ifretailspring.domain.GenericDomain;
+import br.edu.ifpr.bsi.ifretailspring.domain.carrinho.Carrinho;
 import br.edu.ifpr.bsi.ifretailspring.domain.produto.Produto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,15 +14,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "tb_itens_carrinho")
-public class ItemCarrinho extends GenericDomain {
+public class ItemPedido extends GenericDomain {
 
     @ManyToOne
     @JoinColumn(name = "produto_id")
     private Produto produto;
 
     @ManyToOne
-    @JoinColumn(name = "carrinho_id")
-    private Carrinho carrinho;
+    @JoinColumn(name = "pedido_id")
+    private Pedido pedido;
 
     private int quantidade;
     private double precoUnitario;

@@ -36,6 +36,9 @@ public class ClienteService {
     }
 
     public Cliente salvar(Cliente cliente) {
+        if (cliente.getContatoList() != null && !cliente.getContatoList().isEmpty()){
+            cliente.getContatoList().forEach(contato-> contato.setUser(cliente));
+        }
         return this.clienteRepository.save(cliente);
     }
 

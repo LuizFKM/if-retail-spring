@@ -23,8 +23,4 @@ public class Endereco extends GenericDomain {
     private String estado;
     private String cep;
     private String pais;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 }

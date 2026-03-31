@@ -21,8 +21,9 @@ public abstract class User extends GenericDomain {
     @Enumerated(EnumType.STRING)
     private UserType tipo;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Endereco> enderecoList = new ArrayList<>();
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "endereco_id")
+    private Endereco endereco;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Contato> contatoList = new ArrayList<>();

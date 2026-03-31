@@ -3,6 +3,7 @@ package br.edu.ifpr.bsi.ifretailspring.domain.contato;
 import br.edu.ifpr.bsi.ifretailspring.domain.GenericDomain;
 import br.edu.ifpr.bsi.ifretailspring.domain.User;
 import br.edu.ifpr.bsi.ifretailspring.domain.cliente.Cliente;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -23,5 +24,6 @@ public class Contato extends GenericDomain {
 
         @ManyToOne
         @JoinColumn(name = "user_id")
+        @JsonIgnore
         private User user;
 }
