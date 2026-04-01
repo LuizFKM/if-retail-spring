@@ -1,6 +1,8 @@
 package br.edu.ifpr.bsi.ifretailspring.services;
 
+import br.edu.ifpr.bsi.ifretailspring.domain.cliente.Cliente;
 import br.edu.ifpr.bsi.ifretailspring.domain.pedido.Pedido;
+import br.edu.ifpr.bsi.ifretailspring.domain.produto.Produto;
 import br.edu.ifpr.bsi.ifretailspring.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

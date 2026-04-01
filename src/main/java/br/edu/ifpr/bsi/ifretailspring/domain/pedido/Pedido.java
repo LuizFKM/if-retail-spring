@@ -2,6 +2,7 @@ package br.edu.ifpr.bsi.ifretailspring.domain.pedido;
 
 import br.edu.ifpr.bsi.ifretailspring.domain.GenericDomain;
 import br.edu.ifpr.bsi.ifretailspring.domain.cliente.Cliente;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ public class Pedido extends GenericDomain {
     private LocalDateTime dataDoPedido;
     private LocalDateTime dataDeEntregaDoPedido;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="cliente_id")
     private Cliente cliente;
