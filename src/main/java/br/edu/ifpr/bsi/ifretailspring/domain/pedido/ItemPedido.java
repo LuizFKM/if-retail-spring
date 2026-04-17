@@ -13,7 +13,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "tb_itens_carrinho")
+@Table(name = "tb_itens_pedido")
 public class ItemPedido extends GenericDomain {
 
     @ManyToOne
