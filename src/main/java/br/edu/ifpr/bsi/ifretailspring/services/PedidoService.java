@@ -1,7 +1,9 @@
 package br.edu.ifpr.bsi.ifretailspring.services;
 
 import br.edu.ifpr.bsi.ifretailspring.domain.pedido.Pedido;
+import br.edu.ifpr.bsi.ifretailspring.domain.produto.Produto;
 import br.edu.ifpr.bsi.ifretailspring.repository.PedidoRepository;
+import br.edu.ifpr.bsi.ifretailspring.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,9 @@ public class PedidoService {
 
     @Autowired
     private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private ProdutoRepository produtoRepository;
 
     public List<Pedido> listar() {
         return this.pedidoRepository.findAll();
@@ -40,7 +45,13 @@ public class PedidoService {
         pedido.setDataDeEntregaDoPedido(LocalDateTime.now().plusDays(7));
         pedido.setStatus(true);
 
-        pedido.getItems().forEach(itemPedido -> itemPedido.setPedido(pedido));
+        pedido.getItems().forEach(itemPedido -> {
+            // Busca o Produto gerenciado pelo Hibernate para evitar TransientPropertyValueException
+            Produto produto = produtoRepository.findById(itemPedido.getProduto().getID())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
+            itemPedido.setProduto(produto);
+            itemPedido.setPedido(pedido);
+        });
 
         return pedidoRepository.save(pedido);
     }
