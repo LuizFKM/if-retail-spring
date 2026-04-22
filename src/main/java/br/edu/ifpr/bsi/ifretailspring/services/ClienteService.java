@@ -35,6 +35,7 @@ public class ClienteService {
         return this.clienteRepository.getAllByNameLike(name);
     }
 
+    @Transactional
     public Cliente salvar(Cliente cliente) {
         if (cliente.getContatoList() != null && !cliente.getContatoList().isEmpty()){
             cliente.getContatoList().forEach(contato-> contato.setUser(cliente));
@@ -42,6 +43,7 @@ public class ClienteService {
         return this.clienteRepository.save(cliente);
     }
 
+    @Transactional
     public Cliente atualizar(Long id, Cliente cliente) {
         this.clienteRepository.findById(id)
                 .orElseThrow(() ->
