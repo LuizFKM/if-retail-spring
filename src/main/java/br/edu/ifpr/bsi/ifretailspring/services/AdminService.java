@@ -35,10 +35,12 @@ public class AdminService {
         return this.adminRepository.getAllByNameLike(name);
     }
 
+    @Transactional
     public Admin salvar(Admin admin) {
         return this.adminRepository.save(admin);
     }
 
+    @Transactional
     public Admin atualizar(Long id, Admin admin) {
         this.adminRepository.findById(id)
                 .orElseThrow(() ->

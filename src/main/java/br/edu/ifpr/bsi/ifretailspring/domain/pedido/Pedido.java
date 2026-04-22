@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ import java.util.List;
 @Setter
 @Table(name="tb_pedidos")
 public class Pedido extends GenericDomain {
+    @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime dataDoPedido;
     private LocalDateTime dataDeEntregaDoPedido;
 

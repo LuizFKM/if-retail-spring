@@ -18,8 +18,8 @@ public class Carrinho extends GenericDomain {
 
 
 
-    @OneToOne
-    @JoinColumn(name = "cliente_id")
+    // mappedBy porque Cliente é o dono do relacionamento (possui @JoinColumn)
+    @OneToOne(mappedBy = "carrinho")
     private Cliente cliente;
 
 }

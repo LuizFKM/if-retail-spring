@@ -31,10 +31,12 @@ public class ProdutoService {
         return this.produtoRepository.findProdutosSemEstoque();
     }
 
+    @Transactional
     public Produto salvar(Produto produto) {
         return this.produtoRepository.save(produto);
     }
 
+    @Transactional
     public Produto atualizar(Long id, Produto produto) {
         this.produtoRepository.findById(id)
                 .orElseThrow(() ->
