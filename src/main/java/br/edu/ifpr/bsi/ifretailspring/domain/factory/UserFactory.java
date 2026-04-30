@@ -1,6 +1,6 @@
 package br.edu.ifpr.bsi.ifretailspring.domain.factory;
 
-import br.edu.ifpr.bsi.ifretailspring.domain.User;
+import br.edu.ifpr.bsi.ifretailspring.domain.user.User;
 import br.edu.ifpr.bsi.ifretailspring.domain.admin.Admin;
 import br.edu.ifpr.bsi.ifretailspring.domain.carrinho.Carrinho;
 import br.edu.ifpr.bsi.ifretailspring.domain.cliente.Cliente;

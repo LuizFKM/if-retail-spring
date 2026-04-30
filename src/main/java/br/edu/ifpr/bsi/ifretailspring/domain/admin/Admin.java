@@ -1,10 +1,9 @@
 package br.edu.ifpr.bsi.ifretailspring.domain.admin;
 
-import br.edu.ifpr.bsi.ifretailspring.domain.User;
+import br.edu.ifpr.bsi.ifretailspring.domain.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,5 +19,4 @@ public class Admin extends User {
     private String setor;
     private String cargo;
     private LocalDate dataAdmissao;
-    private boolean status;
 }
