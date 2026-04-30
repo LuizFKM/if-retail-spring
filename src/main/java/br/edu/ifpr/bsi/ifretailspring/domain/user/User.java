@@ -1,5 +1,6 @@
-package br.edu.ifpr.bsi.ifretailspring.domain;
+package br.edu.ifpr.bsi.ifretailspring.domain.user;
 
+import br.edu.ifpr.bsi.ifretailspring.domain.GenericDomain;
 import br.edu.ifpr.bsi.ifretailspring.domain.contato.Contato;
 import br.edu.ifpr.bsi.ifretailspring.domain.endereco.Endereco;
 import br.edu.ifpr.bsi.ifretailspring.domain.enums.UserType;
@@ -16,7 +17,7 @@ import java.util.List;
 public abstract class User extends GenericDomain {
     private String name;
     private String cpf;
-    private String password; // Hash
+    private String password;
 
     @Enumerated(EnumType.STRING)
     private UserType tipo;

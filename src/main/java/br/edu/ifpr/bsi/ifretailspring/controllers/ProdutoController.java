@@ -1,6 +1,8 @@
 package br.edu.ifpr.bsi.ifretailspring.controllers;
 
 import br.edu.ifpr.bsi.ifretailspring.domain.produto.Produto;
+import br.edu.ifpr.bsi.ifretailspring.domain.produto.ProdutoDetailDTO;
+import br.edu.ifpr.bsi.ifretailspring.domain.produto.ProdutoRequestDTO;
 import br.edu.ifpr.bsi.ifretailspring.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,37 +20,37 @@ public class ProdutoController {
 
     // READ - Listar todos os produtos (GET)
     @GetMapping
-    public ResponseEntity<List<Produto>> listarProdutos() {
-        List<Produto> produtos = this.produtoService.listar();
+    public ResponseEntity<List<ProdutoDetailDTO>> listarProdutos() {
+        List<ProdutoDetailDTO> produtos = this.produtoService.listar();
         return ResponseEntity.ok(produtos);
     }
 
     // READ - Buscar produto por ID (GET)
     @GetMapping("/{id}")
-    public ResponseEntity<Produto> buscarPorId(@PathVariable Long id) {
-        Produto produto = this.produtoService.buscarPorId(id);
+    public ResponseEntity<ProdutoDetailDTO> buscarPorId(@PathVariable Long id) {
+        ProdutoDetailDTO produto = this.produtoService.buscarPorId(id);
         return ResponseEntity.ok(produto);
     }
 
     // READ - Listar produtos sem estoque (GET)
     @GetMapping("/sem-estoque")
-    public ResponseEntity<List<Produto>> listarSemEstoque() {
-        List<Produto> produtos = this.produtoService.listarSemEstoque();
+    public ResponseEntity<List<ProdutoDetailDTO>> listarSemEstoque() {
+        List<ProdutoDetailDTO> produtos = this.produtoService.listarSemEstoque();
         return ResponseEntity.ok(produtos);
     }
 
     // CREATE - Criar um novo produto (POST)
     @PostMapping
-    public ResponseEntity<Produto> criar(@RequestBody Produto request) {
-        Produto produtoSalvo = this.produtoService.salvar(request);
-        return ResponseEntity.ok(produtoSalvo);
+    public ResponseEntity<ProdutoDetailDTO> criar(@RequestBody ProdutoRequestDTO request) {
+        ProdutoDetailDTO produtoSalvo = this.produtoService.salvar(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(produtoSalvo);
     }
 
     // UPDATE - Atualizar um produto existente (PUT)
     @PutMapping("/{id}")
-    public ResponseEntity<Produto> atualizar(@PathVariable Long id,
-                                              @RequestBody Produto request) {
-        Produto produtoAtualizado = this.produtoService.atualizar(id, request);
+    public ResponseEntity<ProdutoDetailDTO> atualizar(@PathVariable Long id,
+                                                      @RequestBody ProdutoRequestDTO request) {
+        ProdutoDetailDTO produtoAtualizado = this.produtoService.atualizar(id, request);
         return ResponseEntity.ok(produtoAtualizado);
     }
 

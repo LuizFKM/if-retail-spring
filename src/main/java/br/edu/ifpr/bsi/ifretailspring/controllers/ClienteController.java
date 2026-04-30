@@ -1,6 +1,8 @@
 package br.edu.ifpr.bsi.ifretailspring.controllers;
 
 import br.edu.ifpr.bsi.ifretailspring.domain.cliente.Cliente;
+import br.edu.ifpr.bsi.ifretailspring.domain.cliente.ClienteDetailDTO;
+import br.edu.ifpr.bsi.ifretailspring.domain.cliente.ClienteRequestDTO;
 import br.edu.ifpr.bsi.ifretailspring.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,44 +20,44 @@ public class ClienteController {
 
     // READ - Listar todos os clientes (GET)
     @GetMapping
-    public ResponseEntity<List<Cliente>> listarClientes() {
-        List<Cliente> clientes = this.clienteService.listar();
+    public ResponseEntity<List<ClienteDetailDTO>> listarClientes() {
+        List<ClienteDetailDTO> clientes = this.clienteService.listar();
         return ResponseEntity.ok(clientes);
     }
 
     // READ - Buscar cliente por ID (GET)
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> buscarPorId(@PathVariable Long id) {
-        Cliente cliente = this.clienteService.buscarPorId(id);
+    public ResponseEntity<ClienteDetailDTO> buscarPorId(@PathVariable Long id) {
+        ClienteDetailDTO cliente = this.clienteService.buscarPorId(id);
         return ResponseEntity.ok(cliente);
     }
 
     // READ - Buscar clientes por CPF (GET)
     @GetMapping("/cpf/{cpf}")
-    public ResponseEntity<List<Cliente>> buscarPorCpf(@PathVariable String cpf) {
-        List<Cliente> clientes = this.clienteService.buscarPorCpf(cpf);
+    public ResponseEntity<List<ClienteDetailDTO>> buscarPorCpf(@PathVariable String cpf) {
+        List<ClienteDetailDTO> clientes = this.clienteService.buscarPorCpf(cpf);
         return ResponseEntity.ok(clientes);
     }
 
     // READ - Buscar clientes por nome (GET)
     @GetMapping("/nome/{name}")
-    public ResponseEntity<List<Cliente>> buscarPorNome(@PathVariable String name) {
-        List<Cliente> clientes = this.clienteService.buscarPorNome(name);
+    public ResponseEntity<List<ClienteDetailDTO>> buscarPorNome(@PathVariable String name) {
+        List<ClienteDetailDTO> clientes = this.clienteService.buscarPorNome(name);
         return ResponseEntity.ok(clientes);
     }
 
     // CREATE - Criar um novo cliente (POST)
     @PostMapping
-    public ResponseEntity<Cliente> criar(@RequestBody Cliente request) {
-        Cliente clienteSalvo = this.clienteService.salvar(request);
-        return ResponseEntity.ok(clienteSalvo);
+    public ResponseEntity<ClienteDetailDTO> criar(@RequestBody ClienteRequestDTO request) {
+        ClienteDetailDTO clienteSalvo = this.clienteService.salvar(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(clienteSalvo);
     }
 
     // UPDATE - Atualizar um cliente existente (PUT)
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> atualizar(@PathVariable Long id,
-                                              @RequestBody Cliente request) {
-        Cliente clienteAtualizado = this.clienteService.atualizar(id, request);
+    public ResponseEntity<ClienteDetailDTO> atualizar(@PathVariable Long id,
+                                              @RequestBody ClienteRequestDTO request) {
+        ClienteDetailDTO clienteAtualizado = this.clienteService.atualizar(id, request);
         return ResponseEntity.ok(clienteAtualizado);
     }
 

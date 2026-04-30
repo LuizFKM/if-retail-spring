@@ -1,6 +1,9 @@
 package br.edu.ifpr.bsi.ifretailspring.services;
 
 import br.edu.ifpr.bsi.ifretailspring.domain.cliente.Cliente;
+import br.edu.ifpr.bsi.ifretailspring.domain.cliente.ClienteDetailDTO;
+import br.edu.ifpr.bsi.ifretailspring.domain.cliente.ClienteRequestDTO;
+import br.edu.ifpr.bsi.ifretailspring.mappers.ClienteMapper;
 import br.edu.ifpr.bsi.ifretailspring.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,41 +19,56 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    public List<Cliente> listar() {
-        return this.clienteRepository.findAll();
+    @Autowired
+    private ClienteMapper clienteMapper;
+
+    public List<ClienteDetailDTO> listar() {
+        List<Cliente> clientes = clienteRepository.findAll();
+        return clientes.stream().map(this.clienteMapper::entityToDetailDTO).toList();
+
+    }
+    public ClienteDetailDTO buscarPorId(Long id) {
+        Cliente clienteEncontrado = this.clienteRepository.findById(id).orElse(null);
+        if(clienteEncontrado == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente nao encontrado");
+        }
+        return this.clienteMapper.entityToDetailDTO(clienteEncontrado);
     }
 
-    public Cliente buscarPorId(Long id) {
-        return this.clienteRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                "Cliente não encontrado"));
+    public List<ClienteDetailDTO> buscarPorCpf(String cpf) {
+        List<Cliente> clienteEncontrado = this.clienteRepository.findByCpf(cpf);
+        if(clienteEncontrado == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente nao encontrado");
+        }
+        return clienteEncontrado.stream().map(this.clienteMapper::entityToDetailDTO).toList();
+
     }
 
-    public List<Cliente> buscarPorCpf(String cpf) {
-        return this.clienteRepository.findByCpf(cpf);
-    }
-
-    public List<Cliente> buscarPorNome(String name) {
-        return this.clienteRepository.getAllByNameLike(name);
+    public List<ClienteDetailDTO> buscarPorNome(String name) {
+        List<Cliente> clientes = clienteRepository.findByName(name);
+        return clientes.stream()
+                .map(this.clienteMapper::entityToDetailDTO)
+                .toList();
     }
 
     @Transactional
-    public Cliente salvar(Cliente cliente) {
+    public ClienteDetailDTO salvar(ClienteRequestDTO request) {
+        Cliente cliente = this.clienteMapper.requestDTOtoEntity(request);
         if (cliente.getContatoList() != null && !cliente.getContatoList().isEmpty()){
             cliente.getContatoList().forEach(contato-> contato.setUser(cliente));
         }
-        return this.clienteRepository.save(cliente);
+        return this.clienteMapper.entityToDetailDTO(this.clienteRepository.save(cliente));
     }
 
     @Transactional
-    public Cliente atualizar(Long id, Cliente cliente) {
+    public ClienteDetailDTO atualizar(Long id, ClienteRequestDTO request) {
         this.clienteRepository.findById(id)
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 "Cliente não encontrado"));
+        Cliente cliente = this.clienteMapper.requestDTOtoEntity(request);
         cliente.setID(id);
-        return this.clienteRepository.save(cliente);
+        return this.clienteMapper.entityToDetailDTO(this.clienteRepository.save(cliente));
     }
 
     @Transactional
