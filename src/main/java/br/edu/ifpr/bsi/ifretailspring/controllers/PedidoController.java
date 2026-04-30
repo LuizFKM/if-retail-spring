@@ -1,6 +1,8 @@
 package br.edu.ifpr.bsi.ifretailspring.controllers;
 
 import br.edu.ifpr.bsi.ifretailspring.domain.pedido.Pedido;
+import br.edu.ifpr.bsi.ifretailspring.domain.pedido.PedidoDetailDTO;
+import br.edu.ifpr.bsi.ifretailspring.domain.pedido.PedidoRequestDTO;
 import br.edu.ifpr.bsi.ifretailspring.services.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,15 +19,15 @@ public class PedidoController {
     private PedidoService pedidoService;
 
     @GetMapping
-    public ResponseEntity<List<Pedido>> listarPedidos(){
-        List<Pedido> pedidos = this.pedidoService.listar();
+    public ResponseEntity<List<PedidoDetailDTO>> listarPedidos(){
+        List<PedidoDetailDTO> pedidos = this.pedidoService.listar();
         return ResponseEntity.ok(pedidos);
 
     }
 
     @PostMapping
-    public ResponseEntity<Pedido> criar(@RequestBody Pedido pedido){
-        Pedido pedidoSalvo = pedidoService.salvar(pedido);
+    public ResponseEntity<PedidoDetailDTO> criar(@RequestBody PedidoRequestDTO pedido){
+        PedidoDetailDTO pedidoSalvo = pedidoService.salvar(pedido);
         return ResponseEntity.status(HttpStatus.CREATED).body(pedidoSalvo);
     }
 

@@ -1,6 +1,9 @@
 package br.edu.ifpr.bsi.ifretailspring.services;
 
 import br.edu.ifpr.bsi.ifretailspring.domain.produto.Produto;
+import br.edu.ifpr.bsi.ifretailspring.domain.produto.ProdutoDetailDTO;
+import br.edu.ifpr.bsi.ifretailspring.domain.produto.ProdutoRequestDTO;
+import br.edu.ifpr.bsi.ifretailspring.mappers.ProdutoMapper;
 import br.edu.ifpr.bsi.ifretailspring.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,34 +19,42 @@ public class ProdutoService {
     @Autowired
     private ProdutoRepository produtoRepository;
 
-    public List<Produto> listar() {
-        return this.produtoRepository.findAll();
+    @Autowired
+    private ProdutoMapper produtoMapper;
+
+    public List<ProdutoDetailDTO> listar() {
+        List<Produto> produtos = this.produtoRepository.findAll();
+        return produtos.stream().map(this.produtoMapper::entityToDetailDTO).toList();
     }
 
-    public Produto buscarPorId(Long id) {
-        return this.produtoRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                "Produto não encontrado"));
+    public ProdutoDetailDTO buscarPorId(Long id) {
+        Produto produtoEncontrado = this.produtoRepository.findById(id).orElse(null);
+        if(produtoEncontrado == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "produto nao encontrado");
+        }
+        return this.produtoMapper.entityToDetailDTO(produtoEncontrado);
     }
 
-    public List<Produto> listarSemEstoque() {
-        return this.produtoRepository.findProdutosSemEstoque();
+    public List<ProdutoDetailDTO> listarSemEstoque() {
+        List<Produto> produtosSemEstoque = this.produtoRepository.findProdutosSemEstoque();
+        return produtosSemEstoque.stream().map(this.produtoMapper::entityToDetailDTO).toList();
     }
 
     @Transactional
-    public Produto salvar(Produto produto) {
-        return this.produtoRepository.save(produto);
+    public ProdutoDetailDTO salvar(ProdutoRequestDTO request) {
+        Produto produto = this.produtoMapper.requestDTOToEntity(request);
+        return this.produtoMapper.entityToDetailDTO(this.produtoRepository.save(produto));
     }
 
     @Transactional
-    public Produto atualizar(Long id, Produto produto) {
+    public ProdutoDetailDTO atualizar(Long id, ProdutoRequestDTO request) {
         this.produtoRepository.findById(id)
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 "Produto não encontrado"));
+        Produto produto = this.produtoMapper.requestDTOToEntity(request);
         produto.setID(id);
-        return this.produtoRepository.save(produto);
+        return this.produtoMapper.entityToDetailDTO(this.produtoRepository.save(produto));
     }
 
     @Transactional

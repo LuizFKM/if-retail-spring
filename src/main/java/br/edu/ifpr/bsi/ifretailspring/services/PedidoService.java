@@ -1,7 +1,11 @@
 package br.edu.ifpr.bsi.ifretailspring.services;
 
 import br.edu.ifpr.bsi.ifretailspring.domain.pedido.Pedido;
+import br.edu.ifpr.bsi.ifretailspring.domain.pedido.PedidoDetailDTO;
+import br.edu.ifpr.bsi.ifretailspring.domain.pedido.PedidoRequestDTO;
 import br.edu.ifpr.bsi.ifretailspring.domain.produto.Produto;
+import br.edu.ifpr.bsi.ifretailspring.mappers.PedidoMapper;
+import br.edu.ifpr.bsi.ifretailspring.mappers.ProdutoMapper;
 import br.edu.ifpr.bsi.ifretailspring.repository.PedidoRepository;
 import br.edu.ifpr.bsi.ifretailspring.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,38 +26,41 @@ public class PedidoService {
     @Autowired
     private ProdutoRepository produtoRepository;
 
-    public List<Pedido> listar() {
-        return this.pedidoRepository.findAll();
+    @Autowired
+    private PedidoMapper pedidoMapper
+
+    public List<PedidoDetailDTO> listar() {
+        List<Pedido> pedidos = this.pedidoRepository.findAll();
+        return pedidos.stream().map(this.pedidoMapper::entityToDetailDTO).toList();
     }
 
-    public Pedido buscarPorId(Long id) {
-        return this.pedidoRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                "Pedido não encontrado"));
+    public PedidoDetailDTO buscarPorId(Long id) {
+        Pedido pedidoEncontrado = this.pedidoRepository.findById(id).orElse(null);
+        if(pedidoEncontrado == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "pedido nao encontrado");
+        }
+        return this.pedidoMapper.entityToDetailDTO(pedidoEncontrado);
     }
 
     @Transactional
-    public Pedido salvar(Pedido pedido) {
-        // Valida itens usando ResponseStatusException em vez de RuntimeException genérica
+    public PedidoDetailDTO salvar(PedidoRequestDTO request) {
+        Pedido pedido = this.pedidoMapper.requestDTOToEntity(request);
         if (pedido.getItems() == null || pedido.getItems().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Não é possível criar um pedido sem itens.");
         }
 
-        // dataDoPedido é preenchida pelo @CreationTimestamp; apenas dataDeEntrega é definida manualmente
         pedido.setDataDeEntregaDoPedido(LocalDateTime.now().plusDays(7));
         pedido.setStatus(true);
 
         pedido.getItems().forEach(itemPedido -> {
-            // Busca o Produto gerenciado pelo Hibernate para evitar TransientPropertyValueException
             Produto produto = produtoRepository.findById(itemPedido.getProduto().getID())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
             itemPedido.setProduto(produto);
             itemPedido.setPedido(pedido);
         });
 
-        return pedidoRepository.save(pedido);
+        return this.pedidoMapper.entityToDetailDTO(pedido);
     }
 
     @Transactional
