@@ -10,7 +10,7 @@ import br.edu.ifpr.bsi.ifretailspring.domain.pedido.PedidoSummaryDTO;
 import java.util.List;
 
 public record ClienteDetailDTO(
-    Long ID,
+    Long id,
     String name,
     String cpf,
     UserType tipo,

@@ -11,7 +11,6 @@ public class UserFactory {
         switch (type) {
             case ADMIN:
                 Admin admin = new Admin();
-                admin.setStatus(true); // Default de um admin
                 return admin;
             case CLIENTE:
                 Cliente cliente = new Cliente();

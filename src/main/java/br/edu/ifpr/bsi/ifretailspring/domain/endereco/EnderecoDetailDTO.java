@@ -3,6 +3,7 @@ package br.edu.ifpr.bsi.ifretailspring.domain.endereco;
 import br.edu.ifpr.bsi.ifretailspring.domain.cliente.ClienteSummaryDTO;
 
 public record EnderecoDetailDTO(
+        Long id,
         String rua,
         String numero,
         String complemento,
