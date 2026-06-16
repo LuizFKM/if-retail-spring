@@ -27,7 +27,7 @@ public class PedidoService {
     private ProdutoRepository produtoRepository;
 
     @Autowired
-    private PedidoMapper pedidoMapper
+    private PedidoMapper pedidoMapper;
 
     public List<PedidoDetailDTO> listar() {
         List<Pedido> pedidos = this.pedidoRepository.findAll();
