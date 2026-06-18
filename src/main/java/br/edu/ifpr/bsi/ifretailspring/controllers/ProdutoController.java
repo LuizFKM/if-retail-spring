@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/produtos")
+@CrossOrigin(origins = "http://localhost:5173") //TODO remover ao fazer deploy
 public class ProdutoController {
 
     @Autowired
