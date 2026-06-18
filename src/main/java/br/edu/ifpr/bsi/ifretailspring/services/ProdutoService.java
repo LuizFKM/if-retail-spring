@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -21,6 +22,9 @@ public class ProdutoService {
 
     @Autowired
     private ProdutoMapper produtoMapper;
+
+    @Autowired
+    private StorageService storageService;
 
     public List<ProdutoDetailDTO> listar() {
         List<Produto> produtos = this.produtoRepository.findAll();
@@ -53,7 +57,7 @@ public class ProdutoService {
                         new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 "Produto não encontrado"));
         Produto produto = this.produtoMapper.requestDTOToEntity(request);
-        produto.setID(id);
+        produto.setId(id);
         return this.produtoMapper.entityToDetailDTO(this.produtoRepository.save(produto));
     }
 
@@ -65,4 +69,25 @@ public class ProdutoService {
                                 "Produto não encontrado"));
         this.produtoRepository.deleteById(id);
     }
+
+    @Transactional
+    public ProdutoDetailDTO salvarImagem(Long id, MultipartFile imagem){
+        Produto produto = this.produtoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
+
+        try{
+            if(imagem != null){
+                String urlImagem = storageService.upload("produto-api-imagem", imagem,
+                        "imagem-cliente" + id);
+                produto.setUrlFotoProduto(urlImagem);
+            }
+
+            Produto produtoComImagem = this.produtoRepository.save(produto);
+            return this.produtoMapper.entityToDetailDTO(produtoComImagem);
+
+        }catch(Exception e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao salvar imagem");
+        }
+    }
+
 }

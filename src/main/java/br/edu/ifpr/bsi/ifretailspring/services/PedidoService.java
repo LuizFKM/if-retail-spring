@@ -50,11 +50,10 @@ public class PedidoService {
                     "Não é possível criar um pedido sem itens.");
         }
 
-        pedido.setDataDeEntregaDoPedido(LocalDateTime.now().plusDays(7));
         pedido.setStatus(true);
 
         pedido.getItems().forEach(itemPedido -> {
-            Produto produto = produtoRepository.findById(itemPedido.getProduto().getID())
+            Produto produto = produtoRepository.findById(itemPedido.getProduto().getId())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
             itemPedido.setProduto(produto);
             itemPedido.setPedido(pedido);
@@ -69,7 +68,7 @@ public class PedidoService {
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 "Pedido não encontrado"));
-        pedido.setID(id);
+        pedido.setId(id);
         return this.pedidoRepository.save(pedido);
     }
 

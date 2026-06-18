@@ -1,9 +1,7 @@
 package br.edu.ifpr.bsi.ifretailspring.domain.pedido;
 
 import br.edu.ifpr.bsi.ifretailspring.domain.GenericDomain;
-import br.edu.ifpr.bsi.ifretailspring.domain.carrinho.Carrinho;
 import br.edu.ifpr.bsi.ifretailspring.domain.produto.Produto;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -18,14 +16,14 @@ import lombok.Setter;
 public class ItemPedido extends GenericDomain {
 
     @ManyToOne
-    @JoinColumn(name = "produto_id")
+    @JoinColumn(name = "produto_id", nullable = false)
     private Produto produto;
 
     @ManyToOne
-    @JoinColumn(name = "pedido_id")
-    @JsonIgnore
+    @JoinColumn(name = "pedido_id", nullable = false)
     private Pedido pedido;
 
+    @JoinColumn(name = "quantidade", nullable = false)
     private int quantidade;
-    private double precoUnitario;
+
 }

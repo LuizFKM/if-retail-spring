@@ -1,5 +1,5 @@
 package br.edu.ifpr.bsi.ifretailspring.domain.enums;
 
-public enum UserType {
+public enum UserRole {
     CLIENTE, ADMIN;
 }

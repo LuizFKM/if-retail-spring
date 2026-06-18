@@ -6,6 +6,6 @@ import java.util.List;
 
 public record ItemPedidoSummaryDTO(
         Long id,
-        List<ProdutoSummaryDTO> protudos
+        ProdutoSummaryDTO produto
 ) {
 }

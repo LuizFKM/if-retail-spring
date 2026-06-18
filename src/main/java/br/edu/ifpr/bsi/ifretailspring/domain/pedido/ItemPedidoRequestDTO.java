@@ -5,7 +5,7 @@ import br.edu.ifpr.bsi.ifretailspring.domain.produto.ProdutoSummaryDTO;
 import java.util.List;
 
 public record ItemPedidoRequestDTO(
-        List<ProdutoSummaryDTO> produtos,
+        ProdutoSummaryDTO produto,
         int quantidade
 ) {
 }

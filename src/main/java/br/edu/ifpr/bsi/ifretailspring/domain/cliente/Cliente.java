@@ -1,7 +1,6 @@
 package br.edu.ifpr.bsi.ifretailspring.domain.cliente;
 
 import br.edu.ifpr.bsi.ifretailspring.domain.user.User;
-import br.edu.ifpr.bsi.ifretailspring.domain.carrinho.Carrinho;
 import br.edu.ifpr.bsi.ifretailspring.domain.pedido.Pedido;
 import br.edu.ifpr.bsi.ifretailspring.domain.produto.Produto;
 import jakarta.persistence.*;
@@ -17,9 +16,6 @@ import java.util.List;
 @PrimaryKeyJoinColumn(name = "user_id")
 public class Cliente extends User {
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "carrinho_id")
-    private Carrinho carrinho;
 
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidoList = new ArrayList<>();
@@ -31,4 +27,5 @@ public class Cliente extends User {
             inverseJoinColumns = @JoinColumn(name = "produto_id")
     )
     private List<Produto> favoritos = new ArrayList<>();
+
 }

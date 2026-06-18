@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -60,4 +61,16 @@ public class ProdutoController {
     public void excluir(@PathVariable Long id) {
         this.produtoService.excluir(id);
     }
+
+    @PostMapping("/{id}/imagem")
+    public ResponseEntity<ProdutoDetailDTO> fazerUploadImagem(
+            @PathVariable Long id,
+            @RequestParam("img") MultipartFile imagem) {
+
+        ProdutoDetailDTO produtoAtualizado = this.produtoService.salvarImagem(id, imagem);
+
+        return ResponseEntity.ok(produtoAtualizado);
+    }
+
+
 }

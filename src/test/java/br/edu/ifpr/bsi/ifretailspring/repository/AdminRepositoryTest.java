@@ -1,8 +1,7 @@
 package br.edu.ifpr.bsi.ifretailspring.repository;
 
 import br.edu.ifpr.bsi.ifretailspring.domain.admin.Admin;
-import br.edu.ifpr.bsi.ifretailspring.domain.cliente.Cliente;
-import br.edu.ifpr.bsi.ifretailspring.domain.enums.UserType;
+import br.edu.ifpr.bsi.ifretailspring.domain.enums.UserRole;
 import br.edu.ifpr.bsi.ifretailspring.domain.factory.UserFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -29,17 +28,17 @@ public class AdminRepositoryTest {
         admin.setCargo("Administrador");
         admin.setMatricula("509-e");
         admin.setDataAdmissao(LocalDate.of(2005, 9, 10));
-        admin.setTipo(UserType.ADMIN);
+        admin.setRole(UserRole.ADMIN);
 
         adminRepository.save(admin);
-        Admin adminInserido = adminRepository.findById(admin.getID()).get();
+        Admin adminInserido = adminRepository.findById(admin.getId()).get();
 
         Assertions.assertNotNull(adminInserido, "Admin não foi inserido");
     }
 
     @Test
     public void testInserirComFactory(){
-        Admin admin = (Admin) UserFactory.createUser(UserType.ADMIN);
+        Admin admin = (Admin) UserFactory.createUser(UserRole.ADMIN);
         admin.setName("Milton Nascimento");
         admin.setCpf("654.654.222-90");
         admin.setPassword("123123123123");
@@ -47,10 +46,10 @@ public class AdminRepositoryTest {
         admin.setCargo("Rei");
         admin.setMatricula("509-e");
         admin.setDataAdmissao(LocalDate.of(2005, 9, 10));
-        admin.setTipo(UserType.ADMIN);
+        admin.setRole(UserRole.ADMIN);
 
         adminRepository.save(admin);
-        Admin adminInserido = adminRepository.findById(admin.getID()).get();
+        Admin adminInserido = adminRepository.findById(admin.getId()).get();
 
         Assertions.assertNotNull(adminInserido, "Admin não foi inserido");
 
@@ -66,13 +65,13 @@ public class AdminRepositoryTest {
         admin.setCargo("Administrador");
         admin.setMatricula("509-e");
         admin.setDataAdmissao(LocalDate.of(2005, 9, 10));
-        admin.setTipo(UserType.ADMIN);
+        admin.setRole(UserRole.ADMIN);
         admin = adminRepository.save(admin);
 
         admin.setCargo("Chefe");
         admin = adminRepository.save(admin);
 
-        Admin adminAtualizado = adminRepository.findById(admin.getID()).get();
+        Admin adminAtualizado = adminRepository.findById(admin.getId()).get();
         Assertions.assertEquals("Chefe", adminAtualizado.getCargo(),
                 "O cargo não foi atualizado");
 
@@ -87,12 +86,12 @@ public class AdminRepositoryTest {
         admin.setCargo("Administrador");
         admin.setMatricula("509-e");
         admin.setDataAdmissao(LocalDate.of(2005, 9, 10));
-        admin.setTipo(UserType.ADMIN);
+        admin.setRole(UserRole.ADMIN);
         admin = adminRepository.save(admin);
 
         adminRepository.delete(admin);
 
-        Admin adminDeletado = adminRepository.findById(admin.getID()).orElse(null);
+        Admin adminDeletado = adminRepository.findById(admin.getId()).orElse(null);
         Assertions.assertNull(adminDeletado, "admin ainda se encontra no banco");
     }
 
@@ -106,7 +105,7 @@ public class AdminRepositoryTest {
         admin.setCargo("Administrador");
         admin.setMatricula("509-e");
         admin.setDataAdmissao(LocalDate.of(2005, 9, 10));
-        admin.setTipo(UserType.ADMIN);
+        admin.setRole(UserRole.ADMIN);
         adminRepository.save(admin);
 
         Admin encontrado = adminRepository.findByCpf(admin.getCpf())
@@ -121,13 +120,13 @@ public class AdminRepositoryTest {
         a1.setName("Milton Nascimento");
         a1.setCpf("111.222.333-44");
         a1.setPassword("bituca123");
-        a1.setTipo(UserType.ADMIN);
+        a1.setRole(UserRole.ADMIN);
 
         Admin a2 = new Admin();
         a2.setName("Lô Borges");
         a2.setCpf("555.666.777-88");
         a2.setPassword("clube123");
-        a2.setTipo(UserType.ADMIN);
+        a2.setRole(UserRole.ADMIN);
 
         adminRepository.saveAll(List.of(a1, a2));
         List<Admin> encontrados = adminRepository.findByName("Milton Nascimento");
@@ -141,13 +140,13 @@ public class AdminRepositoryTest {
         a1.setName("Gilberto Gil");
         a1.setCpf("111.111.111-11");
         a1.setPassword("senha123");
-        a1.setTipo(UserType.ADMIN);
+        a1.setRole(UserRole.ADMIN);
 
         Admin a2 = new Admin();
         a2.setName("Gilberto Passos");
         a2.setCpf("222.222.222-22");
         a2.setPassword("senha456");
-        a2.setTipo(UserType.ADMIN);
+        a2.setRole(UserRole.ADMIN);
 
         adminRepository.save(a1);
         adminRepository.save(a2);
@@ -167,7 +166,7 @@ public class AdminRepositoryTest {
         admin.setCargo("Administrador");
         admin.setMatricula("509-e");
         admin.setDataAdmissao(LocalDate.of(2005, 9, 10));
-        admin.setTipo(UserType.ADMIN);
+        admin.setRole(UserRole.ADMIN);
         adminRepository.save(admin);
 
         long inicio = System.currentTimeMillis();

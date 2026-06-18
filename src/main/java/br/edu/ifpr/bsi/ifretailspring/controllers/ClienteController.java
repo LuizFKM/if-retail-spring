@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -49,10 +50,13 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteSalvo);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ClienteDetailDTO> atualizar(@PathVariable Long id,
-                                              @RequestBody ClienteRequestDTO request) {
-        ClienteDetailDTO clienteAtualizado = this.clienteService.atualizar(id, request);
+    @PutMapping(value ="/{id}", consumes = "multipart/form-data")
+    public ResponseEntity<ClienteDetailDTO> atualizar(
+            @PathVariable Long id,
+            @RequestPart("dados") ClienteRequestDTO request,
+            @RequestPart(value = "img", required = false)
+            MultipartFile imagem) {
+        ClienteDetailDTO clienteAtualizado = this.clienteService.atualizar(id, request, imagem);
         return ResponseEntity.ok(clienteAtualizado);
     }
 

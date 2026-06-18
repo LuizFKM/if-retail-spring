@@ -66,7 +66,7 @@ public class AdminService {
                         new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 "Admin não encontrado"));
         Admin admin = this.adminMapper.requestDTOToEntity(request);
-        admin.setID(id);
+        admin.setId(id);
         return this.adminMapper.entityToDetailDTO(this.adminRepository.save(admin));
     }
 

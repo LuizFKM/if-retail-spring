@@ -17,15 +17,16 @@ import java.util.List;
 @Setter
 @Table(name="tb_pedidos")
 public class Pedido extends GenericDomain {
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime dataDoPedido;
-    private LocalDateTime dataDeEntregaDoPedido;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="cliente_id")
     private Cliente cliente;
+
+    @Column(name="status")
     private boolean status;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -21,6 +22,8 @@ public class ClienteService {
 
     @Autowired
     private ClienteMapper clienteMapper;
+    @Autowired
+    private StorageService storageService;
 
     public List<ClienteDetailDTO> listar() {
         List<Cliente> clientes = clienteRepository.findAll();
@@ -61,13 +64,19 @@ public class ClienteService {
     }
 
     @Transactional
-    public ClienteDetailDTO atualizar(Long id, ClienteRequestDTO request) {
-        this.clienteRepository.findById(id)
+    public ClienteDetailDTO atualizar(Long id, ClienteRequestDTO request, MultipartFile imagem) {
+        Cliente cliente = this.clienteRepository.findById(id)
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 "Cliente não encontrado"));
-        Cliente cliente = this.clienteMapper.requestDTOtoEntity(request);
-        cliente.setID(id);
+        this.clienteMapper.updateFromDto(request, cliente);
+
+        if(imagem != null){
+            String urlImagem = storageService.upload("Clientes-api-spring", imagem,
+                    "imagem-cliente" + id);
+            cliente.setUrlFotoPerfil(urlImagem);
+        }
+
         return this.clienteMapper.entityToDetailDTO(this.clienteRepository.save(cliente));
     }
 
@@ -79,4 +88,6 @@ public class ClienteService {
                                 "Cliente não encontrado"));
         this.clienteRepository.deleteById(id);
     }
+
+
 }
