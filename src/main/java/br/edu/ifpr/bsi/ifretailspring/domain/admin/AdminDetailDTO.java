@@ -2,7 +2,8 @@ package br.edu.ifpr.bsi.ifretailspring.domain.admin;
 
 import br.edu.ifpr.bsi.ifretailspring.domain.contato.ContatoSummaryDTO;
 import br.edu.ifpr.bsi.ifretailspring.domain.endereco.EnderecoSummaryDTO;
-import br.edu.ifpr.bsi.ifretailspring.domain.enums.UserType;
+import br.edu.ifpr.bsi.ifretailspring.domain.enums.UserRole;
+import br.edu.ifpr.bsi.ifretailspring.domain.user.UserDetailDTO;
 
 import java.util.List;
 
@@ -13,9 +14,11 @@ public record AdminDetailDTO(
         String matricula,
         String cargo,
         String setor,
-        UserType tipo,
+        String role,
+        String password,
+        String username,
         List<ContatoSummaryDTO> listaContatos,
         EnderecoSummaryDTO endereco
 
-) {
+) implements UserDetailDTO {
 }

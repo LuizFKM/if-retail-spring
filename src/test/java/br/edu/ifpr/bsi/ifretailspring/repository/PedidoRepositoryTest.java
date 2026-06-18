@@ -1,11 +1,10 @@
 package br.edu.ifpr.bsi.ifretailspring.repository;
 
 import br.edu.ifpr.bsi.ifretailspring.domain.cliente.Cliente;
-import br.edu.ifpr.bsi.ifretailspring.domain.enums.UserType;
+import br.edu.ifpr.bsi.ifretailspring.domain.enums.UserRole;
 import br.edu.ifpr.bsi.ifretailspring.domain.pedido.ItemPedido;
 import br.edu.ifpr.bsi.ifretailspring.domain.pedido.Pedido;
 import br.edu.ifpr.bsi.ifretailspring.domain.produto.Produto;
-import br.edu.ifpr.bsi.ifretailspring.services.PedidoService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,14 +32,13 @@ public class PedidoRepositoryTest {
         cliente.setName("Elis Regina");
         cliente.setCpf("123.234.345-60");
         cliente.setPassword("1a2b3c");
-        cliente.setTipo(UserType.CLIENTE);
+        cliente.setRole(UserRole.CLIENTE);
         clienteRepository.save(cliente);
 
         Produto produto = new Produto();
         produto.setDescricao("Notebook Dell Inspiron");
         produto.setPrecoUnitario(3500.00);
         produto.setQuantidadeEmEstoque(10);
-        produto.setStatus(true);
         produto = produtoRepository.save(produto);
 
 
@@ -49,7 +47,6 @@ public class PedidoRepositoryTest {
         ItemPedido item = new ItemPedido();
         item.setProduto(produto);
         item.setQuantidade(2);
-        item.setPrecoUnitario(150.0);
 
         Pedido pedidoNovo = new Pedido();
 
@@ -73,29 +70,27 @@ public class PedidoRepositoryTest {
         cliente.setName("Milton Nascimento");
         cliente.setCpf("111.222.333-44");
         cliente.setPassword("senha123");
-        cliente.setTipo(UserType.CLIENTE);
+        cliente.setRole(UserRole.CLIENTE);
         clienteRepository.save(cliente);
 
         Produto produto = new Produto();
         produto.setDescricao("Teclado Mecânico");
         produto.setPrecoUnitario(450.00);
         produto.setQuantidadeEmEstoque(5);
-        produto.setStatus(true);
         produto = produtoRepository.save(produto);
 
         ItemPedido item = new ItemPedido();
         item.setProduto(produto);
         item.setQuantidade(1);
-        item.setPrecoUnitario(450.0);
 
         Pedido pedido = new Pedido();
         item.setPedido(pedido);
         pedido.setCliente(cliente);
         Pedido pedidoSalvo = pedidoRepository.save(pedido);
 
-        Optional<Pedido> encontrado = pedidoRepository.findById(pedidoSalvo.getID());
+        Optional<Pedido> encontrado = pedidoRepository.findById(pedidoSalvo.getId());
         Assertions.assertTrue(encontrado.isPresent(), "O pedido deveria ser encontrado pelo ID");
-        Assertions.assertEquals(pedidoSalvo.getID(), encontrado.get().getID());
+        Assertions.assertEquals(pedidoSalvo.getId(), encontrado.get().getId());
     }
 
     @Test
@@ -105,13 +100,13 @@ public class PedidoRepositoryTest {
         cliente.setName("Chico Buarque");
         cliente.setCpf("999.888.777-66");
         cliente.setPassword("abc456");
-        cliente.setTipo(UserType.CLIENTE);
+        cliente.setRole(UserRole.CLIENTE);
         clienteRepository.save(cliente);
 
         Pedido pedido = new Pedido();
         pedido.setCliente(cliente);
         Pedido pedidoSalvo = pedidoRepository.save(pedido);
-        Long id = pedidoSalvo.getID();
+        Long id = pedidoSalvo.getId();
 
         pedidoRepository.deleteById(id);
 

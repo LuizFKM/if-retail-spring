@@ -21,10 +21,9 @@ public class ProdutoRepositoryTest {
         produto.setDescricao("Notebook Dell Inspiron");
         produto.setPrecoUnitario(3500.00);
         produto.setQuantidadeEmEstoque(10);
-        produto.setStatus(true);
         produto = produtoRepository.save(produto);
 
-        Produto produtoInserido = produtoRepository.findById(produto.getID()).get();
+        Produto produtoInserido = produtoRepository.findById(produto.getId()).get();
 
         Assertions.assertNotNull(produtoInserido, "O produto não foi inserido.");
     }
@@ -35,13 +34,12 @@ public class ProdutoRepositoryTest {
         produto.setDescricao("Mouse sem fio");
         produto.setPrecoUnitario(80.00);
         produto.setQuantidadeEmEstoque(50);
-        produto.setStatus(true);
         produto = produtoRepository.save(produto);
 
         produto.setPrecoUnitario(65.00);
         produto = produtoRepository.save(produto);
 
-        Produto produtoAtualizado = produtoRepository.findById(produto.getID()).get();
+        Produto produtoAtualizado = produtoRepository.findById(produto.getId()).get();
 
         Assertions.assertEquals(65.00, produtoAtualizado.getPrecoUnitario(),
                 "O preço do produto não foi atualizado.");
@@ -53,12 +51,11 @@ public class ProdutoRepositoryTest {
         produto.setDescricao("Teclado Mecânico");
         produto.setPrecoUnitario(250.00);
         produto.setQuantidadeEmEstoque(15);
-        produto.setStatus(true);
         produto = produtoRepository.save(produto);
 
         produtoRepository.delete(produto);
 
-        Produto produtoDeletado = produtoRepository.findById(produto.getID()).orElse(null);
+        Produto produtoDeletado = produtoRepository.findById(produto.getId()).orElse(null);
         Assertions.assertNull(produtoDeletado, "O produto ainda se encontra no banco de dados.");
     }
 
@@ -68,14 +65,12 @@ public class ProdutoRepositoryTest {
         p1.setDescricao("Monitor LG 24'");
         p1.setPrecoUnitario(900.00);
         p1.setQuantidadeEmEstoque(5);
-        p1.setStatus(true);
         produtoRepository.save(p1);
 
         Produto p2 = new Produto();
         p2.setDescricao("Headset Gamer");
         p2.setPrecoUnitario(350.00);
         p2.setQuantidadeEmEstoque(20);
-        p2.setStatus(true);
         produtoRepository.save(p2);
 
         List<Produto> produtos = produtoRepository.findAll();
@@ -90,14 +85,12 @@ public class ProdutoRepositoryTest {
         p1.setDescricao("Teclado Gamer");
         p1.setPrecoUnitario(150.00);
         p1.setQuantidadeEmEstoque(0);
-        p1.setStatus(true);
         produtoRepository.save(p1);
 
         Produto p2 = new Produto();
         p2.setDescricao("Mousepad XL");
         p2.setPrecoUnitario(50.00);
         p2.setQuantidadeEmEstoque(10);
-        p2.setStatus(true);
         produtoRepository.save(p2);
 
 
@@ -106,8 +99,15 @@ public class ProdutoRepositoryTest {
 
         Assertions.assertFalse(esgotados.isEmpty(), "A lista de esgotados não deveria estar vazia.");
 
+    }
 
-
+    @Test
+    public void testInserirImagem(){
+        Produto p1 = new Produto();
+        p1.setDescricao("Teclado Gamer");
+        p1.setPrecoUnitario(150.00);
+        p1.setQuantidadeEmEstoque(0);
+        produtoRepository.save(p1);
     }
 
 

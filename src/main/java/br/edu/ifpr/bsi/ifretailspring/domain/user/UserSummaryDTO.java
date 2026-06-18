@@ -1,11 +1,11 @@
 package br.edu.ifpr.bsi.ifretailspring.domain.user;
 
-import br.edu.ifpr.bsi.ifretailspring.domain.enums.UserType;
+import br.edu.ifpr.bsi.ifretailspring.domain.enums.UserRole;
 
-public record UserSummaryDTO(
-        Long id,
-        String name,
-        String cpf,
-        UserType tipo
-) {
+public interface UserSummaryDTO{
+    Long id();
+    String username();
+    String role();
+
+
 }

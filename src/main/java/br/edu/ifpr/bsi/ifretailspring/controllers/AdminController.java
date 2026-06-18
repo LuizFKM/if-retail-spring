@@ -55,8 +55,9 @@ public class AdminController {
 
     // UPDATE - Atualizar um admin existente (PUT)
     @PutMapping("/{id}")
-    public ResponseEntity<AdminDetailDTO> atualizar(@PathVariable Long id,
-                                           @RequestBody AdminRequestDTO request) {
+    public ResponseEntity<AdminDetailDTO> atualizar(
+            @PathVariable Long id,
+            @RequestBody AdminRequestDTO request) {
         AdminDetailDTO adminAtualizado = this.adminService.atualizar(id, request);
         return ResponseEntity.ok(adminAtualizado);
     }

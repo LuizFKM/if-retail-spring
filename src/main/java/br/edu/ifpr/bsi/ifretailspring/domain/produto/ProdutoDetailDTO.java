@@ -5,6 +5,6 @@ public record ProdutoDetailDTO(
         String descricao,
         double precoUnitario,
         int quantidadeEmEstoque,
-        boolean status
+        String urlFotoProduto
 ) {
 }

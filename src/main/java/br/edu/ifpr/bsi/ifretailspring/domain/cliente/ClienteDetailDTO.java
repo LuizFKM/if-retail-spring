@@ -1,11 +1,9 @@
 package br.edu.ifpr.bsi.ifretailspring.domain.cliente;
 
-import br.edu.ifpr.bsi.ifretailspring.domain.carrinho.Carrinho;
 import br.edu.ifpr.bsi.ifretailspring.domain.contato.ContatoSummaryDTO;
 import br.edu.ifpr.bsi.ifretailspring.domain.endereco.EnderecoSummaryDTO;
-import br.edu.ifpr.bsi.ifretailspring.domain.enums.UserType;
-import br.edu.ifpr.bsi.ifretailspring.domain.pedido.Pedido;
 import br.edu.ifpr.bsi.ifretailspring.domain.pedido.PedidoSummaryDTO;
+import br.edu.ifpr.bsi.ifretailspring.domain.user.UserDetailDTO;
 
 import java.util.List;
 
@@ -13,12 +11,12 @@ public record ClienteDetailDTO(
     Long id,
     String name,
     String cpf,
-    UserType tipo,
+    String username,
+    String role,
     EnderecoSummaryDTO endereco,
     List<ContatoSummaryDTO> contatos,
-    Carrinho carrinho,
-    List<PedidoSummaryDTO> pedidos
+    List<PedidoSummaryDTO> pedidos,
+    String urlFotoPerfil
 
-
-) {
+) implements UserDetailDTO {
 }
