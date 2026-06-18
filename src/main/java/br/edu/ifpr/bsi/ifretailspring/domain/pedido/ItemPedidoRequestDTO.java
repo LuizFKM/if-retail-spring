@@ -1,11 +1,8 @@
 package br.edu.ifpr.bsi.ifretailspring.domain.pedido;
 
-import br.edu.ifpr.bsi.ifretailspring.domain.produto.ProdutoSummaryDTO;
-
-import java.util.List;
-
+// produtoId resolvido manualmente no PedidoService (busca Produto pelo id)
 public record ItemPedidoRequestDTO(
-        ProdutoSummaryDTO produto,
+        Long produtoId,
         int quantidade
 ) {
 }

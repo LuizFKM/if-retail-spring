@@ -1,6 +1,5 @@
 package br.edu.ifpr.bsi.ifretailspring.controllers;
 
-import br.edu.ifpr.bsi.ifretailspring.domain.cliente.Cliente;
 import br.edu.ifpr.bsi.ifretailspring.domain.cliente.ClienteDetailDTO;
 import br.edu.ifpr.bsi.ifretailspring.domain.cliente.ClienteRequestDTO;
 import br.edu.ifpr.bsi.ifretailspring.services.ClienteService;
@@ -12,9 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+// CORS global via CorsConfig — @CrossOrigin removido daqui
 @RestController
 @RequestMapping("/clientes")
-@CrossOrigin(origins = "http://localhost:5173") //TODO Remover ao fazer deploy
 public class ClienteController {
 
     @Autowired
@@ -22,42 +21,36 @@ public class ClienteController {
 
     @GetMapping
     public ResponseEntity<List<ClienteDetailDTO>> listarClientes() {
-        List<ClienteDetailDTO> clientes = this.clienteService.listar();
-        return ResponseEntity.ok(clientes);
+        return ResponseEntity.ok(this.clienteService.listar());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ClienteDetailDTO> buscarPorId(@PathVariable Long id) {
-        ClienteDetailDTO cliente = this.clienteService.buscarPorId(id);
-        return ResponseEntity.ok(cliente);
+        return ResponseEntity.ok(this.clienteService.buscarPorId(id));
     }
 
     @GetMapping("/cpf/{cpf}")
     public ResponseEntity<List<ClienteDetailDTO>> buscarPorCpf(@PathVariable String cpf) {
-        List<ClienteDetailDTO> clientes = this.clienteService.buscarPorCpf(cpf);
-        return ResponseEntity.ok(clientes);
+        return ResponseEntity.ok(this.clienteService.buscarPorCpf(cpf));
     }
 
     @GetMapping("/nome/{name}")
     public ResponseEntity<List<ClienteDetailDTO>> buscarPorNome(@PathVariable String name) {
-        List<ClienteDetailDTO> clientes = this.clienteService.buscarPorNome(name);
-        return ResponseEntity.ok(clientes);
+        return ResponseEntity.ok(this.clienteService.buscarPorNome(name));
     }
 
     @PostMapping
     public ResponseEntity<ClienteDetailDTO> criar(@RequestBody ClienteRequestDTO request) {
-        ClienteDetailDTO clienteSalvo = this.clienteService.salvar(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(clienteSalvo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.clienteService.salvar(request));
     }
 
-    @PutMapping(value ="/{id}", consumes = "multipart/form-data")
+    // multipart/form-data: campo "dados" (JSON) + campo "imagem" (arquivo)
+    @PutMapping(value = "/{id}", consumes = "multipart/form-data")
     public ResponseEntity<ClienteDetailDTO> atualizar(
             @PathVariable Long id,
             @RequestPart("dados") ClienteRequestDTO request,
-            @RequestPart(value = "img", required = false)
-            MultipartFile imagem) {
-        ClienteDetailDTO clienteAtualizado = this.clienteService.atualizar(id, request, imagem);
-        return ResponseEntity.ok(clienteAtualizado);
+            @RequestPart(value = "imagem", required = false) MultipartFile imagem) {
+        return ResponseEntity.ok(this.clienteService.atualizar(id, request, imagem));
     }
 
     @DeleteMapping("/{id}")

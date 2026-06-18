@@ -9,12 +9,11 @@ import java.util.List;
 public record ClienteRequestDTO(
         String name,
         String cpf,
+        String email,
         String password,
-        EnderecoRequestDTO enderco,
-        List<ContatoRequestDTO> contatos,
+        String urlFotoPerfil,
         String role,
-        String username,
-        String urlFotoPerfil
-
+        EnderecoRequestDTO endereco,
+        List<ContatoRequestDTO> contatos
 ) implements UserRequestDTO {
 }
