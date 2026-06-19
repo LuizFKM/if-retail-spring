@@ -17,7 +17,7 @@ import java.util.List;
 public class Cliente extends User {
 
 
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pedido> pedidoList = new ArrayList<>();
 
     @ManyToMany

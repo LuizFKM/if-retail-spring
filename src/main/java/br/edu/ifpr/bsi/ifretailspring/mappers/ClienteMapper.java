@@ -8,7 +8,7 @@ import br.edu.ifpr.bsi.ifretailspring.domain.pedido.Pedido;
 import br.edu.ifpr.bsi.ifretailspring.domain.pedido.PedidoSummaryDTO;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring", uses = {ContatoMapper.class, EnderecoMapper.class})
+@Mapper(componentModel = "spring", uses = {ContatoMapper.class, EnderecoMapper.class, ProdutoMapper.class})
 public interface ClienteMapper {
 
     @Mapping(source = "contatos", target = "contatoList")
@@ -16,6 +16,7 @@ public interface ClienteMapper {
 
     @Mapping(source = "contatoList", target = "contatos")
     @Mapping(source = "pedidoList", target = "pedidos")
+    @Mapping(source = "favoritos", target = "favoritos")
     ClienteDetailDTO entityToDetailDTO(Cliente cliente);
 
     ClienteSummaryDTO entityToSummaryDTO(Cliente cliente);
@@ -27,6 +28,6 @@ public interface ClienteMapper {
     // Evita dependência circular com PedidoMapper (PedidoMapper usa ClienteMapper)
     default PedidoSummaryDTO pedidoToSummaryDTO(Pedido pedido) {
         if (pedido == null) return null;
-        return new PedidoSummaryDTO(pedido.getId(), pedido.getDataDoPedido(), pedido.isStatus());
+        return new PedidoSummaryDTO(pedido.getId(), pedido.getDataDoPedido(), pedido.getStatus());
     }
 }

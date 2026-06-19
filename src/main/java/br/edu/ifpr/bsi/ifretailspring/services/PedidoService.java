@@ -1,6 +1,7 @@
 package br.edu.ifpr.bsi.ifretailspring.services;
 
 import br.edu.ifpr.bsi.ifretailspring.domain.cliente.Cliente;
+import br.edu.ifpr.bsi.ifretailspring.domain.enums.StatusPedido;
 import br.edu.ifpr.bsi.ifretailspring.domain.pedido.ItemPedido;
 import br.edu.ifpr.bsi.ifretailspring.domain.pedido.Pedido;
 import br.edu.ifpr.bsi.ifretailspring.domain.pedido.PedidoDetailDTO;
@@ -15,6 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -33,9 +37,12 @@ public class PedidoService {
     @Autowired
     private PedidoMapper pedidoMapper;
 
-    public List<PedidoDetailDTO> listar() {
-        return this.pedidoRepository.findAll()
-                .stream().map(this.pedidoMapper::entityToDetailDTO).toList();
+    public Page<PedidoDetailDTO> listar(Pageable pageable) {
+        return this.pedidoRepository.findAll(pageable).map(this.pedidoMapper::entityToDetailDTO);
+    }
+
+    public Page<PedidoDetailDTO> listarPorCliente(Long clienteId, Pageable pageable) {
+        return this.pedidoRepository.findByClienteId(clienteId, pageable).map(this.pedidoMapper::entityToDetailDTO);
     }
 
     public PedidoDetailDTO buscarPorId(Long id) {
@@ -55,7 +62,7 @@ public class PedidoService {
 
         Pedido pedido = new Pedido();
         pedido.setCliente(cliente);
-        pedido.setStatus(true);
+        pedido.setStatus(StatusPedido.ENVIADO);
 
         request.itens().forEach(itemRequest -> {
             Produto produto = produtoRepository.findById(itemRequest.produtoId())
@@ -77,7 +84,15 @@ public class PedidoService {
     public void cancelar(Long id) {
         Pedido pedido = this.pedidoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido não encontrado"));
-        pedido.setStatus(false);
+        pedido.setStatus(StatusPedido.CANCELADO);
+        this.pedidoRepository.save(pedido);
+    }
+
+    @Transactional
+    public void entregar(Long id) {
+        Pedido pedido = this.pedidoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido não encontrado"));
+        pedido.setStatus(StatusPedido.ENTREGUE);
         this.pedidoRepository.save(pedido);
     }
 

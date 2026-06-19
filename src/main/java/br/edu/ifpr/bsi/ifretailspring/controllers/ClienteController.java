@@ -6,12 +6,14 @@ import br.edu.ifpr.bsi.ifretailspring.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-// CORS global via CorsConfig — @CrossOrigin removido daqui
 @RestController
 @RequestMapping("/clientes")
 public class ClienteController {
@@ -20,8 +22,9 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @GetMapping
-    public ResponseEntity<List<ClienteDetailDTO>> listarClientes() {
-        return ResponseEntity.ok(this.clienteService.listar());
+    public ResponseEntity<Page<ClienteDetailDTO>> listarClientes(
+            @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+        return ResponseEntity.ok(this.clienteService.listar(pageable));
     }
 
     @GetMapping("/{id}")
@@ -53,9 +56,28 @@ public class ClienteController {
         return ResponseEntity.ok(this.clienteService.atualizar(id, request, imagem));
     }
 
+    @PostMapping("/{id}/imagem")
+    public ResponseEntity<ClienteDetailDTO> uploadFoto(
+            @PathVariable Long id,
+            @RequestParam("imagem") MultipartFile imagem) {
+        return ResponseEntity.ok(this.clienteService.atualizarFoto(id, imagem));
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(@PathVariable Long id) {
         this.clienteService.excluir(id);
+    }
+
+    @PostMapping("/{id}/favoritos/{produtoId}")
+    public ResponseEntity<ClienteDetailDTO> adicionarFavorito(
+            @PathVariable Long id, @PathVariable Long produtoId) {
+        return ResponseEntity.ok(this.clienteService.adicionarFavorito(id, produtoId));
+    }
+
+    @DeleteMapping("/{id}/favoritos/{produtoId}")
+    public ResponseEntity<ClienteDetailDTO> removerFavorito(
+            @PathVariable Long id, @PathVariable Long produtoId) {
+        return ResponseEntity.ok(this.clienteService.removerFavorito(id, produtoId));
     }
 }
