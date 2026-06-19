@@ -52,12 +52,11 @@ public class ProdutoService {
 
     @Transactional
     public ProdutoDetailDTO atualizar(Long id, ProdutoRequestDTO request) {
-        this.produtoRepository.findById(id)
+        Produto produto = this.produtoRepository.findById(id)
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 "Produto não encontrado"));
-        Produto produto = this.produtoMapper.requestDTOToEntity(request);
-        produto.setId(id);
+        this.produtoMapper.updateFromDto(request, produto);
         return this.produtoMapper.entityToDetailDTO(this.produtoRepository.save(produto));
     }
 

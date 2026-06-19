@@ -3,6 +3,7 @@ package br.edu.ifpr.bsi.ifretailspring.services;
 import br.edu.ifpr.bsi.ifretailspring.domain.cliente.Cliente;
 import br.edu.ifpr.bsi.ifretailspring.domain.cliente.ClienteDetailDTO;
 import br.edu.ifpr.bsi.ifretailspring.domain.cliente.ClienteRequestDTO;
+import br.edu.ifpr.bsi.ifretailspring.domain.enums.UserRole;
 import br.edu.ifpr.bsi.ifretailspring.mappers.ClienteMapper;
 import br.edu.ifpr.bsi.ifretailspring.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,43 +23,40 @@ public class ClienteService {
 
     @Autowired
     private ClienteMapper clienteMapper;
+
     @Autowired
     private StorageService storageService;
 
     public List<ClienteDetailDTO> listar() {
-        List<Cliente> clientes = clienteRepository.findAll();
-        return clientes.stream().map(this.clienteMapper::entityToDetailDTO).toList();
-
+        return clienteRepository.findAll()
+                .stream().map(this.clienteMapper::entityToDetailDTO).toList();
     }
+
     public ClienteDetailDTO buscarPorId(Long id) {
-        Cliente clienteEncontrado = this.clienteRepository.findById(id).orElse(null);
-        if(clienteEncontrado == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente nao encontrado");
-        }
-        return this.clienteMapper.entityToDetailDTO(clienteEncontrado);
+        Cliente cliente = this.clienteRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
+        return this.clienteMapper.entityToDetailDTO(cliente);
     }
 
     public List<ClienteDetailDTO> buscarPorCpf(String cpf) {
-        List<Cliente> clienteEncontrado = this.clienteRepository.findByCpf(cpf);
-        if(clienteEncontrado == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente nao encontrado");
+        List<Cliente> clientes = this.clienteRepository.findByCpf(cpf);
+        if (clientes == null || clientes.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado");
         }
-        return clienteEncontrado.stream().map(this.clienteMapper::entityToDetailDTO).toList();
-
+        return clientes.stream().map(this.clienteMapper::entityToDetailDTO).toList();
     }
 
     public List<ClienteDetailDTO> buscarPorNome(String name) {
-        List<Cliente> clientes = clienteRepository.findByName(name);
-        return clientes.stream()
-                .map(this.clienteMapper::entityToDetailDTO)
-                .toList();
+        return clienteRepository.findByName(name)
+                .stream().map(this.clienteMapper::entityToDetailDTO).toList();
     }
 
     @Transactional
     public ClienteDetailDTO salvar(ClienteRequestDTO request) {
         Cliente cliente = this.clienteMapper.requestDTOtoEntity(request);
-        if (cliente.getContatoList() != null && !cliente.getContatoList().isEmpty()){
-            cliente.getContatoList().forEach(contato-> contato.setUser(cliente));
+        cliente.setRole(UserRole.CLIENTE); // sempre CLIENTE, independente do que vier no request
+        if (cliente.getContatoList() != null && !cliente.getContatoList().isEmpty()) {
+            cliente.getContatoList().forEach(contato -> contato.setUser(cliente));
         }
         return this.clienteMapper.entityToDetailDTO(this.clienteRepository.save(cliente));
     }
@@ -66,14 +64,18 @@ public class ClienteService {
     @Transactional
     public ClienteDetailDTO atualizar(Long id, ClienteRequestDTO request, MultipartFile imagem) {
         Cliente cliente = this.clienteRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                "Cliente não encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
+
         this.clienteMapper.updateFromDto(request, cliente);
 
-        if(imagem != null){
-            String urlImagem = storageService.upload("Clientes-api-spring", imagem,
-                    "imagem-cliente" + id);
+        // Garante referência bidirecional nos contatos após atualização
+        if (cliente.getContatoList() != null) {
+            cliente.getContatoList().forEach(contato -> contato.setUser(cliente));
+        }
+
+        if (imagem != null) {
+            // Endpoint espera multipart com campo "imagem"
+            String urlImagem = storageService.upload("clientes-api-spring", imagem, "imagem-cliente-" + id);
             cliente.setUrlFotoPerfil(urlImagem);
         }
 
@@ -83,11 +85,7 @@ public class ClienteService {
     @Transactional
     public void excluir(Long id) {
         this.clienteRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                "Cliente não encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
         this.clienteRepository.deleteById(id);
     }
-
-
 }

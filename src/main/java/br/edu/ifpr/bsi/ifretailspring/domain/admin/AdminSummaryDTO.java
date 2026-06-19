@@ -4,11 +4,10 @@ import br.edu.ifpr.bsi.ifretailspring.domain.user.UserSummaryDTO;
 
 public record AdminSummaryDTO(
         Long id,
-        String nome,
+        String name,
         String cargo,
         String matricula,
         String setor,
-        String username,
         String role
 ) implements UserSummaryDTO {
 }

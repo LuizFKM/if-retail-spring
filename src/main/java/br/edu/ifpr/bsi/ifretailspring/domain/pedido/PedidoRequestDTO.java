@@ -1,12 +1,10 @@
 package br.edu.ifpr.bsi.ifretailspring.domain.pedido;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
+// dataDoPedido vem do @CreationTimestamp; status é definido no service (true ao criar)
 public record PedidoRequestDTO(
-    LocalDateTime dataPedido,
-    Long clienteId,
-    boolean Status,
-    List<Long> itensId
+        Long clienteId,
+        List<ItemPedidoRequestDTO> itens
 ) {
 }

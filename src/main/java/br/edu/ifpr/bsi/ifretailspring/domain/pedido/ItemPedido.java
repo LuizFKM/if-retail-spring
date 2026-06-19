@@ -2,10 +2,8 @@ package br.edu.ifpr.bsi.ifretailspring.domain.pedido;
 
 import br.edu.ifpr.bsi.ifretailspring.domain.GenericDomain;
 import br.edu.ifpr.bsi.ifretailspring.domain.produto.Produto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,7 +21,7 @@ public class ItemPedido extends GenericDomain {
     @JoinColumn(name = "pedido_id", nullable = false)
     private Pedido pedido;
 
-    @JoinColumn(name = "quantidade", nullable = false)
+    @Column(name = "quantidade", nullable = false) // era @JoinColumn — quantidade é escalar, não FK
     private int quantidade;
 
 }

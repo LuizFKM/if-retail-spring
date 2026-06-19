@@ -1,6 +1,5 @@
 package br.edu.ifpr.bsi.ifretailspring.controllers;
 
-import br.edu.ifpr.bsi.ifretailspring.domain.pedido.Pedido;
 import br.edu.ifpr.bsi.ifretailspring.domain.pedido.PedidoDetailDTO;
 import br.edu.ifpr.bsi.ifretailspring.domain.pedido.PedidoRequestDTO;
 import br.edu.ifpr.bsi.ifretailspring.services.PedidoService;
@@ -19,18 +18,30 @@ public class PedidoController {
     private PedidoService pedidoService;
 
     @GetMapping
-    public ResponseEntity<List<PedidoDetailDTO>> listarPedidos(){
-        List<PedidoDetailDTO> pedidos = this.pedidoService.listar();
-        return ResponseEntity.ok(pedidos);
+    public ResponseEntity<List<PedidoDetailDTO>> listarPedidos() {
+        return ResponseEntity.ok(this.pedidoService.listar());
+    }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<PedidoDetailDTO> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(this.pedidoService.buscarPorId(id));
     }
 
     @PostMapping
-    public ResponseEntity<PedidoDetailDTO> criar(@RequestBody PedidoRequestDTO pedido){
-        PedidoDetailDTO pedidoSalvo = pedidoService.salvar(pedido);
-        return ResponseEntity.status(HttpStatus.CREATED).body(pedidoSalvo);
+    public ResponseEntity<PedidoDetailDTO> criar(@RequestBody PedidoRequestDTO request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.pedidoService.salvar(request));
     }
 
+    // PATCH /pedidos/{id}/cancelar — seta status=false sem deletar o registro
+    @PatchMapping("/{id}/cancelar")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void cancelar(@PathVariable Long id) {
+        this.pedidoService.cancelar(id);
+    }
 
-
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void excluir(@PathVariable Long id) {
+        this.pedidoService.excluir(id);
+    }
 }
