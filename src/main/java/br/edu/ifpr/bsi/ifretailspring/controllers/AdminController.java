@@ -1,12 +1,14 @@
 package br.edu.ifpr.bsi.ifretailspring.controllers;
 
-import br.edu.ifpr.bsi.ifretailspring.domain.admin.Admin;
 import br.edu.ifpr.bsi.ifretailspring.domain.admin.AdminDetailDTO;
 import br.edu.ifpr.bsi.ifretailspring.domain.admin.AdminRequestDTO;
 import br.edu.ifpr.bsi.ifretailspring.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +20,10 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    // READ - Listar todos os admins (GET)
     @GetMapping
-    public ResponseEntity<List<AdminDetailDTO>> listarAdmins() {
-        List<AdminDetailDTO> admins = this.adminService.listar();
-        return ResponseEntity.ok(admins);
+    public ResponseEntity<Page<AdminDetailDTO>> listarAdmins(
+            @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+        return ResponseEntity.ok(this.adminService.listar(pageable));
     }
 
     // READ - Buscar admin por ID (GET)

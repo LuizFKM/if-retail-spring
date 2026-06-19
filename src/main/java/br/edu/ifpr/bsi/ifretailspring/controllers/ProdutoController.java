@@ -6,12 +6,14 @@ import br.edu.ifpr.bsi.ifretailspring.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-// CORS global via CorsConfig — @CrossOrigin removido daqui
 @RestController
 @RequestMapping("/produtos")
 public class ProdutoController {
@@ -20,8 +22,9 @@ public class ProdutoController {
     private ProdutoService produtoService;
 
     @GetMapping
-    public ResponseEntity<List<ProdutoDetailDTO>> listarProdutos() {
-        return ResponseEntity.ok(this.produtoService.listar());
+    public ResponseEntity<Page<ProdutoDetailDTO>> listarProdutos(
+            @PageableDefault(size = 12, sort = "id") Pageable pageable) {
+        return ResponseEntity.ok(this.produtoService.listar(pageable));
     }
 
     @GetMapping("/{id}")

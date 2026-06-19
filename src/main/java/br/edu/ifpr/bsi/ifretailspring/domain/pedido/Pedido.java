@@ -2,7 +2,7 @@ package br.edu.ifpr.bsi.ifretailspring.domain.pedido;
 
 import br.edu.ifpr.bsi.ifretailspring.domain.GenericDomain;
 import br.edu.ifpr.bsi.ifretailspring.domain.cliente.Cliente;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import br.edu.ifpr.bsi.ifretailspring.domain.enums.StatusPedido;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,8 +26,9 @@ public class Pedido extends GenericDomain {
     @JoinColumn(name="cliente_id")
     private Cliente cliente;
 
+    @Enumerated(EnumType.STRING)
     @Column(name="status")
-    private boolean status;
+    private StatusPedido status = StatusPedido.ENVIADO;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemPedido> items = new ArrayList<>();

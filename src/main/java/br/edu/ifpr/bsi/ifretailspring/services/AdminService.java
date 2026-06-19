@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 @Service
@@ -23,9 +26,8 @@ public class AdminService {
     @Autowired
     private AdminMapper adminMapper;
 
-    public List<AdminDetailDTO> listar() {
-        return this.adminRepository.findAll()
-                .stream().map(this.adminMapper::entityToDetailDTO).toList();
+    public Page<AdminDetailDTO> listar(Pageable pageable) {
+        return this.adminRepository.findAll(pageable).map(this.adminMapper::entityToDetailDTO);
     }
 
     public AdminDetailDTO buscarPorId(Long id) {

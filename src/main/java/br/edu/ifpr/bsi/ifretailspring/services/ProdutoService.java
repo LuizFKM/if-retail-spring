@@ -12,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 @Service
@@ -26,9 +29,8 @@ public class ProdutoService {
     @Autowired
     private StorageService storageService;
 
-    public List<ProdutoDetailDTO> listar() {
-        List<Produto> produtos = this.produtoRepository.findAll();
-        return produtos.stream().map(this.produtoMapper::entityToDetailDTO).toList();
+    public Page<ProdutoDetailDTO> listar(Pageable pageable) {
+        return this.produtoRepository.findAll(pageable).map(this.produtoMapper::entityToDetailDTO);
     }
 
     public ProdutoDetailDTO buscarPorId(Long id) {
