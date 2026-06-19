@@ -22,6 +22,5 @@ public class Contato extends GenericDomain {
 
         @ManyToOne
         @JoinColumn(name = "user_id")
-        @JsonIgnore
         private User user;
 }
