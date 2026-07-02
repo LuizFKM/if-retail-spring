@@ -18,7 +18,7 @@ public abstract class User extends GenericDomain {
     @Column(name="name", nullable = false)
     private String name;
 
-    @Column(name="CPF", unique = true)
+    @Column(name="cpf", unique = true)
     private String cpf;
 
     @Column(name="e-mail", unique = true)
