@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admins")
+@CrossOrigin(origins = "https://if-retail-frontend.onrender.com")
 public class AdminController {
 
     @Autowired

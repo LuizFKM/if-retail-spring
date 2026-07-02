@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/produtos")
+@CrossOrigin(origins = "https://if-retail-frontend.onrender.com")
 public class ProdutoController {
 
     @Autowired

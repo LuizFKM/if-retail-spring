@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/pedidos")
+@CrossOrigin(origins = "https://if-retail-frontend.onrender.com")
 public class PedidoController {
 
     @Autowired
